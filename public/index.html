@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Sensor Data</title>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="jquery.canvasjs.min.js"></script>
+    <script src="math.min.js"></script>
+    <script src="moment.min.js"></script>
+    <script>
+      $( document ).ready(function() {
+        var socket = io();
+
+        var dpsTemp = []; // dataPoints
+        var dpsVolts = []; // dataPoints for gas readings
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+          title :{
+            text: "Live Sensor Data"
+          },
+          zoomEnabled: true,
+          panEnabled: true,
+          toolTip: {
+            shared: "true"  //disable here. 
+          },
+          legend:{
+            fontSize: 20,
+            fontFamily: "tamoha",
+            fontColor: "Sienna"      
+          },
+          axisX: {
+            title: "Updated every 500 milliseconds"
+          },
+          axisY: {
+            title: "Degrees Celsius (°C)",
+            minimum: 0,
+            maximum: 70 
+          },
+            axisY2:{ 
+            title: "Gas reading (Volts)",
+            minimum: 0,
+            maximum: 5
+          },
+          data: [{
+            type: "line",
+            xValueType: "dateTime",
+            showInLegend: true,
+            name: "tempSeries",
+            legendText: "Temperature in Celsius degrees (°C)",
+            dataPoints: dpsTemp 
+          },
+          {
+            type: "line",
+            axisYType: "secondary",
+            xValueType: "dateTime",
+            showInLegend: true,
+            name: "gasSeries",
+            legendText: "Methane readings in Volts (V)",
+            dataPoints: dpsVolts
+          }]
+        });
+
+        var updateInterval = 500;
+        var dataLength = 600; // number of dataPoints visible at any point (last 5 minutes in this case)
+
+        var updateChartData = function (dps, xVal, yVal) {
+          dps.push({
+            x: xVal,
+            y: yVal
+          });
+          if (dps.length > dataLength) {
+            dps.shift();
+          }
+        };
+        
+        var computeAverage = function(dps) {
+          var sum = 0.0;
+          for (var i = 0; i < dps.length; ++i) {
+            sum += dps[i].y;
+          }
+          var avg = dps.length == 0 ? 0 : (sum / parseFloat(dps.length));
+          return avg;
+        };
+        
+        var computeMax = function(dps) {
+          var max = 0.0;
+          for (var i = 0; i < dps.length; ++i) {
+            if (max < dps[i].y) {
+              max = dps[i].y;
+            }
+          }
+          return max;
+        };
+        
+        var updateTemp = function(xVal, temp) {
+          updateChartData(dpsTemp, xVal, temp);
+          var $temp = $('#temp-reading');
+          $temp.text(math.round(temp, 2));
+          $('#temp-average').text(math.round(computeAverage(dpsTemp), 2));
+          $('#temp-max').text(math.round(computeMax(dpsTemp), 2));
+          
+          if (temp > 28) {
+            $temp.css({'color': 'red'});
+            $('#high-temp').text("Warning! Temperature is too high!")
+              .css({'color': 'red', 'font-size': '150%'});
+          } else {
+            $temp.css({'color': 'black'});
+            $('#high-temp').text("Temperature is normal")
+              .css({'color': 'green', 'font-size': '150%'});
+          }
+        };
+        
+        var gasDangerRecently = false;
+        
+        var setDangerousGasText = function() {
+          $('#gas-reading').css({"color": "red"});
+          $('#gas-warning').text("Warning! Gas leakage possible in the room!").css({"color": "red", "font-size": "150%"});
+        };
+
+        var setNormalGasText = function() {
+          $('#gas-reading').css({"color": "black"});
+          $('#gas-warning').text("No gas leakage recently!").css({"color": "green", "font-size": "150%"});
+        };
+        
+        var updateGas = function(xVal, gas) {
+          updateChartData(dpsVolts, xVal, gas);
+          $('#gas-reading').text(math.round(gas, 3));
+          $('#gas-average').text(math.round(computeAverage(dpsVolts), 3));
+          $('#gas-max').text(math.round(computeMax(dpsVolts), 2));
+          
+          if (gas > 1) {
+            setDangerousGasText();
+          } else {
+            setNormalGasText();
+          }
+        }
+        
+        socket.on('sensorUpdate', function(msg) {
+          var xVal = Date.now();
+          updateTemp(xVal, msg.temp);
+          updateGas(xVal, msg.gas);
+          chart.render();
+        });
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <h1>Sensor data in my room</h1>
+    <div id="temp">
+      <div id="chartContainer" style="height: 300px; width:100%;">
+      </div>
+      <h2>Current Temperature</h2>
+      <span id="temp-reading">Loading data</span><span> (°C)</span>
+      <span id="high-temp"></span>
+      <div>
+        <div class="stat">
+          <h4>Average Temperature</h4>
+          <span id="temp-average">Loading data</span>
+        </div>
+        <div class="stat">
+          <h4>Max Temperature</h4>
+          <span id="temp-max">Loading data</span>
+        </div>
+      </div>
+    </div>
+    <div id="gas"><h2>Current Methane sensor reading in Volts</h2>
+      <span id="gas-reading">Loading data</span><span> (V)</span>
+      <span id="gas-warning"></span>
+      <div>
+        <div class="stat">
+          <h4>Average Voltage reading</h4>
+          <span id="gas-average">Loading data</span>
+        </div>
+        <div class="stat">
+          <h4>Max Voltage reading</h4>
+          <span id="gas-max">Loading data</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
