@@ -40,6 +40,8 @@ When the data exceeds normal thresholds, then an email is sent from the webserve
 ## Putting components together and wiring them up
 TODO
 
+<img src="https://lh6.googleusercontent.com/-RsfzgB4YwGk/TXoz9VYShII/AAAAAAAAAFk/KQ5fouPUASA/s1600/Untitled+Sketch_bb2.png" alt="Temperature sensor connection" height="400px"/>
+
 ## Software architecture
 TODO
 
