@@ -13,7 +13,15 @@ When the data exceeds normal thresholds, then an email is sent from the webserve
 
 ## Hardware list
   * [Intel Galileo Gen 2](http://www.intel.com/content/www/us/en/embedded/products/galileo/galileo-overview.html)
+
+<img src="http://core0.staticworld.net/images/article/2014/07/galileo-front-2x1-100360692-large.jpg" alt="galileo" /> 
+  
   * [A half-size breadboard](http://www.adafruit.com/products/64)
 
-<img src="http://www.adafruit.com/images/970x728/64-00.jpg" alt="breadboard" height="200px">
-  * 
+<img src="http://www.adafruit.com/images/970x728/64-00.jpg" alt="breadboard" height="200px" />
+
+  * others (TODO)
+
+## Project outcome
+This is how the webpage looks like after a couple seconds of reading data from the sensors.
+<img src="https://www.dropbox.com/s/1ia4gcswatskk8k/Screenshot%202015-06-25%2012.37.51.png?dl=1" alt="Webpage screenshot" height="400px" />
