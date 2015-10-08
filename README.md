@@ -50,8 +50,16 @@ Similarly with the temperature sensor, the VCC pin of the MQ-4 sensor is connect
 
 The analog output pin number 3 (AOUT) of the gas sensor is connected to any of the analog inputs of the Arduino (e.g A0), while the digital output ping number 2 (DOUT) is connected to any of the digital inputs of the Arduino (e.g D0).
 
-## Software architecture and component interaciton
-<img src="https://cloud.githubusercontent.com/assets/1174078/10370121/7cb65f2a-6dd5-11e5-90b3-3f3b28f669fe.png" alt="component interaction diagram" height="300px"/>
+## Software architecture and interaction
+<img src="https://cloud.githubusercontent.com/assets/1174078/10370121/7cb65f2a-6dd5-11e5-90b3-3f3b28f669fe.png" alt="component interaction diagram" height="450px"/>
+
+Basically this project consists of two modules:
+  * the client JavaScript (and HTML) application
+  * the NodeJS server
+
+The Client application is responsible for communicating with the web server via messages through sockets and for displaying the graphs correctly on the page based on the data stream received from the server.
+
+The NodeJS server is a web server installed on the Arduino board and is responsible for gathering the data from the sensors and streaming it to the web page on each update. It also sends emails to me when the gas sensor or temperature exceed a certain threshold. This is limited to maximum one email every 5 minutes in order to not flood my inbox.
 
 ## Project outcome
 This is how the webpage looks like after a couple seconds of reading data from the sensors.
