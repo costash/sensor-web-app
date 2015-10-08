@@ -50,8 +50,8 @@ Similarly with the temperature sensor, the VCC pin of the MQ-4 sensor is connect
 
 The analog output pin number 3 (AOUT) of the gas sensor is connected to any of the analog inputs of the Arduino (e.g A0), while the digital output ping number 2 (DOUT) is connected to any of the digital inputs of the Arduino (e.g D0).
 
-## Software architecture
-TODO
+## Software architecture and component interaciton
+<img src="https://cloud.githubusercontent.com/assets/1174078/10370121/7cb65f2a-6dd5-11e5-90b3-3f3b28f669fe.png" alt="component interaction diagram" height="300px"/>
 
 ## Project outcome
 This is how the webpage looks like after a couple seconds of reading data from the sensors.
