@@ -28,6 +28,10 @@ When the data exceeds normal thresholds, then an email is sent from the webserve
 
 <img src="http://electronics.semaf.at/bilder/produkte/gross/Methane-Gas-Sensor-MQ-4.jpg" alt="methane gas sensor mq-4" height="200px"/>
 
+The sensor has 4 pins, thus being fairly simple to connect to any Arduino board:
+
+<img src="http://www.learningaboutelectronics.com/images/MQ-4-methane-sensor-pinout.png" alt="methane gas sensor mq-4 back connections" height="200px"/>
+
   * 1 * Temperature sensor LM335Z
 
 <img src="http://www.tandyonline.co.uk/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/l/m/lm335.png" alt="Temperature sensor LM335Z" height="200px"/>
@@ -38,9 +42,13 @@ When the data exceeds normal thresholds, then an email is sent from the webserve
   * 1 * microUSB cable for connecting to the board
 
 ## Putting components together and wiring them up
-TODO
+Connecting the temperature sensor is similar with that in the image below.
 
 <img src="https://lh6.googleusercontent.com/-RsfzgB4YwGk/TXoz9VYShII/AAAAAAAAAFk/KQ5fouPUASA/s1600/Untitled+Sketch_bb2.png" alt="Temperature sensor connection" height="400px"/>
+
+Similarly, the VCC pin of the MQ-4 sensor is connected to the 5V lane of the Arduino, and the GND pin to the GND lane of the Arduino.
+
+The analog output pin number 3 (AOUT) of the gas sensor is connected to any of the analog inputs of the Arduino (e.g A0), while the digital output ping number 2 (DOUT) is connected to any of the digital inputs of the Arduino (e.g D0).
 
 ## Software architecture
 TODO
